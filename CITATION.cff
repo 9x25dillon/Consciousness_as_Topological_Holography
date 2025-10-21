@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Lynn"
+    given-names: "Dillon R."
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+title: "3^627 Topological Holography Framework: Consciousness as Topological Quantum Field Theory"
+version: 1.0.0
+date-released: 2025-10-21
+url: "https://github.com/9x25dillon/consciousness-tqft"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Lynn"
+    given-names: "Dillon R."
+  title: "Observer States as Cardy Boundaries: A Topological Framework for Multi-Model AI Consensus"
+  year: 2025
+  month: 10
+  url: "https://github.com/9x25dillon/consciousness-tqft"
+  notes: "Preprint"
