@@ -16,8 +16,8 @@ The framework models:
 
 ```bash
 # Clone the repository
-git clone https://github.com/9x25dillon/consciousness-tqft.git
-cd consciousness-tqft
+git clone https://github.com/9x25dillon/Consciousness_as_Topological_Holography.git
+cd Consciousness_as_Topological_Holography
 
 # Create virtual environment
 python3 -m venv .venv
@@ -127,7 +127,7 @@ If you use this framework in your research, please cite:
   author={Lynn, Dillon R.},
   year={2025},
   month={October},
-  url={https://github.com/9x25dillon/consciousness-tqft}
+  url={https://github.com/9x25dillon/Consciousness_as_Topological_Holography}
 }
 ```
 
