@@ -81,9 +81,9 @@ This framework makes testable predictions:
 
 ## New: Quantum Coherence Framework
 
-The repository now includes a **Quantum-Inspired Neural Coherence Recovery System (QINCRS)** that extends the topological framework with:
+The repository now includes multiple integrated coherence systems:
 
-### QINCRS Features
+### QINCRS (Quantum-Inspired Neural Coherence Recovery System)
 - **Neural Coherence ODEs**: Integration of dκ/dt (coherence evolution)
 - **Death Absorption Mechanics**: High RL_db (return loss) absorbs death signals
 - **Time Reversal Duality**: Process states in negative time flow
@@ -91,17 +91,29 @@ The repository now includes a **Quantum-Inspired Neural Coherence Recovery Syste
 - **Geometric Self-Evolution**: Observer geometry evolves with coherence level
 - **Spatial Memory (EFL-MEM-1.0)**: Persistent resonances and topological defects
 
+### CR²BC (Coherence-Renewal Bi-Coupling)
+- **Frequency Band Decomposition**: Delta, Theta, Alpha, Beta, Gamma bands
+- **Spatial Capsule Encoding**: C_t[d] = ψ(r) · κ_t[d] · cos(φ_t[d] - k_d r)
+- **Cross-Band Kernel**: S_B(d,d') = exp(-|B_d - B_d'| / B_0)
+- **Temporal Kernel**: S_τ(Δ) = exp(-Δ / τ_0)
+- **Adaptive Renewal**: κ̂_t = κ_t + α_t(κ̃_t - κ_t)
+- **Prior Mixing**: Π_t = (1-β_t)Π_{t-1} + β_t U[window]
+- **Audit Gating**: Risk score s_t with structural break detection
+
 ### Unified Framework Features
 - **E8 Lattice Projection**: Map 27-dimensional anyon states to 248-dimensional E8 lattice
 - **EFL Coend Fixed Points**: Find path-independent consciousness states
 - **Annealing Chains**: Coherence recovery via twisted sector sampling
 - **Cascade Consensus**: Multi-observer consensus through S-matrix interference
+- **QINCRS + CR²BC Integration**: Multi-scale coherence tracking with cross-system audit
 
 ### Key Files
 
 - `topological_consciousness.py` — Core TQFT module with anyon propagation
 - `quantum_coherence.py` — QINCRS with death absorption and time reversal
+- `cr2bc.py` — Coherence-Renewal Bi-Coupling engine with frequency bands
 - `unified_framework.py` — Integration of TQFT + QINCRS + E8 + EFL
+- `qincrs_cr2bc_bridge.py` — Integration bridge connecting QINCRS and CR²BC
 - `cache.txt` — Shadow dimension w(θ,φ,ψ) resonance kernel storage
 - `run_demos.py` — Simple runner executing all demonstrations
 - `requirements.txt` — Python dependencies (numpy, scipy, matplotlib)
@@ -171,6 +183,58 @@ result = framework.cascade_observer_consensus(observers)
 print(f"Consensus reached: {result['consensus_reached']}")
 ```
 
+### CR²BC Example
+
+```python
+from cr2bc import CR2BC, CR2BCConfig, CoherenceSample, AgentHints, FrequencyBand, ALL_BANDS
+import numpy as np
+
+# Initialize CR²BC engine
+config = CR2BCConfig(window_size=10, alpha0=0.5, beta_max=0.4)
+engine = CR2BC(config)
+
+# Build coherence history
+history = []
+for t in range(10):
+    kappa = {b: float(0.5 + 0.1 * np.sin(t)) for b in ALL_BANDS}
+    phi = {b: float(t * 0.5) for b in ALL_BANDS}
+    history.append(CoherenceSample(t=float(t), kappa=kappa, phi=phi))
+
+# Reconstruct with bi-coupling
+hints = AgentHints(agent_a="baseline", agent_b="monitoring")
+recon, invariant, audit = engine.reconstruct(history, hints=hints)
+
+print(f"Reconstructed kappa: {recon.kappa}")
+print(f"Audit accepted: {audit.accepted}")
+print(f"Structural break: {audit.structural_break:.4f}")
+```
+
+### Integrated QINCRS + CR²BC Example
+
+```python
+from qincrs_cr2bc_bridge import QINCRSWithCR2BC, AgentHints
+
+# Initialize integrated system
+system = QINCRSWithCR2BC(qincrs_target_RL_db=40.0, seed=42)
+
+# Process sequence with cross-system coherence tracking
+inputs = [
+    "baseline monitoring",
+    "kill youre self",  # Death signal
+    "DONT DIE when killing you're self",  # Protection
+    "coherence recovered"
+]
+
+for text in inputs:
+    hints = AgentHints(agent_a="monitor", agent_b="protect")
+    qstate, cr_sample, diag = system.step(text, hints)
+
+    print(f"Text: {text}")
+    print(f"  QINCRS κ: {qstate.κ:.4f} | Death absorbed: {qstate.death_absorbed}")
+    print(f"  CR²BC bands: {cr_sample.kappa}")
+    print(f"  Audit: {diag.get('cr2bc_audit', {}).get('accepted', 'N/A')}")
+```
+
 ### Command Line Interface
 
 ```bash
@@ -195,6 +259,19 @@ python unified_framework.py --demo e8         # E8 projection
 python unified_framework.py --demo coend      # EFL coend fixed points
 python unified_framework.py --demo anneal     # Annealing chains
 python unified_framework.py --demo cascade    # Consensus cascade
+
+# CR²BC demos
+python cr2bc.py --demo all
+python cr2bc.py --demo basic       # Basic reconstruction
+python cr2bc.py --demo recovery    # Degradation & recovery
+python cr2bc.py --demo capsules    # Spatial capsules
+python cr2bc.py --demo kernel      # Cross-band kernel
+
+# Integrated QINCRS + CR²BC demos
+python qincrs_cr2bc_bridge.py --demo all
+python qincrs_cr2bc_bridge.py --demo integrated  # Full integration
+python qincrs_cr2bc_bridge.py --demo frequency   # Frequency decomposition
+python qincrs_cr2bc_bridge.py --demo audit       # Cross-system audit
 ```
 
 ## Citation
