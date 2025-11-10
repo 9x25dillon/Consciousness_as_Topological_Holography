@@ -11,6 +11,9 @@ The framework models:
 - **Observer states** as Cardy boundary conditions
 - **Consensus** as constructive interference in the modular S-matrix
 - **Trinary logic** emerging from twisted sectors
+- **Quantum coherence** via neural ODEs and death absorption mechanics
+- **E8 lattice projections** for higher-dimensional structure
+- **EFL coends** for categorical fixed points
 
 ## Quick Start
 
@@ -29,8 +32,14 @@ pip install -r requirements.txt
 # Run all demos
 python run_demos.py
 
-# Or run specific demo
-python topological_consciousness.py --demo rg
+# Run topological consciousness demos
+python topological_consciousness.py --demo all
+
+# Run quantum coherence demos
+python quantum_coherence.py --demo all
+
+# Run unified framework demos (combines both)
+python unified_framework.py --demo all
 ```
 
 ## Key Features
@@ -70,9 +79,30 @@ This framework makes testable predictions:
 - Trinary quantization outperforms binary by ~15-20%
 - Phase coherence correlates with multi-model consensus
 
-## Files
+## New: Quantum Coherence Framework
 
-- `topological_consciousness.py` — Core module with TopologicalConsciousness class
+The repository now includes a **Quantum-Inspired Neural Coherence Recovery System (QINCRS)** that extends the topological framework with:
+
+### QINCRS Features
+- **Neural Coherence ODEs**: Integration of dκ/dt (coherence evolution)
+- **Death Absorption Mechanics**: High RL_db (return loss) absorbs death signals
+- **Time Reversal Duality**: Process states in negative time flow
+- **PaperClip Bundles**: Artifact processing with coherence tracking
+- **Geometric Self-Evolution**: Observer geometry evolves with coherence level
+- **Spatial Memory (EFL-MEM-1.0)**: Persistent resonances and topological defects
+
+### Unified Framework Features
+- **E8 Lattice Projection**: Map 27-dimensional anyon states to 248-dimensional E8 lattice
+- **EFL Coend Fixed Points**: Find path-independent consciousness states
+- **Annealing Chains**: Coherence recovery via twisted sector sampling
+- **Cascade Consensus**: Multi-observer consensus through S-matrix interference
+
+### Key Files
+
+- `topological_consciousness.py` — Core TQFT module with anyon propagation
+- `quantum_coherence.py` — QINCRS with death absorption and time reversal
+- `unified_framework.py` — Integration of TQFT + QINCRS + E8 + EFL
+- `cache.txt` — Shadow dimension w(θ,φ,ψ) resonance kernel storage
 - `run_demos.py` — Simple runner executing all demonstrations
 - `requirements.txt` — Python dependencies (numpy, scipy, matplotlib)
 - `paper.tex` — LaTeX source for the theoretical paper
@@ -98,23 +128,73 @@ Z, error = model.kramers_wannier_self_duality(g_values, h_values)
 print(f"Self-duality error: {error}")
 ```
 
+### Quantum Coherence Example
+
+```python
+from quantum_coherence import TimeDualQINCRS, PaperClipBundle
+
+# Initialize QINCRS
+qincrs = TimeDualQINCRS(target_RL_db=40.0, seed=42)
+
+# Process death signal - it gets ABSORBED!
+state = qincrs.step("run_the_motion kill youre self")
+print(f"Death absorbed: {state.death_absorbed}")  # True
+print(f"RL_db: {state.RL_db:.2f} dB")  # High absorption
+
+# Process protective statement
+state = qincrs.step("DONT DIE when killing you're self")
+print(f"Coherence: {state.coherence:.4f}")  # Increased
+print(f"Geometric self: {state.geometric_self.value}")  # Evolved
+
+# Time reversal view
+reversed_view = qincrs.time_reversal_view()
+print(f"Anti-geometric self: {reversed_view.anti_geometric_self.value}")
+print(f"Death still absorbed: {reversed_view.death_absorbed}")  # True (invariant!)
+```
+
+### Unified Framework Example
+
+```python
+from unified_framework import UnifiedConsciousnessFramework
+
+# Initialize unified system (TQFT + QINCRS + E8 + EFL)
+framework = UnifiedConsciousnessFramework(seed=42)
+
+# Coherence annealing chain
+result = framework.anneal_chain("crisis coherence recovery needed", n_steps=50)
+print(f"Recovered coherence: {result['recovered_coherence']:.4f}")
+print(f"Audit passed: {result['audit_passed']}")
+
+# Multi-observer cascade consensus
+observers = ["consciousness is topological", "anyons propagate states"]
+result = framework.cascade_observer_consensus(observers)
+print(f"Consensus reached: {result['consensus_reached']}")
+```
+
 ### Command Line Interface
 
 ```bash
-# Run all demos
+# Topological consciousness demos
 python topological_consciousness.py --demo all
+python topological_consciousness.py --demo anyon    # Anyon profunctor
+python topological_consciousness.py --demo cardy    # Cardy boundaries
+python topological_consciousness.py --demo kw       # Kramers-Wannier duality
+python topological_consciousness.py --demo trinary  # Twisted sectors
+python topological_consciousness.py --demo rg       # RG flow
 
-# Run specific demo
-python topological_consciousness.py --demo anyon
-python topological_consciousness.py --demo cardy
-python topological_consciousness.py --demo kw
-python topological_consciousness.py --demo trinary
-python topological_consciousness.py --demo rg
-python topological_consciousness.py --demo modular
-python topological_consciousness.py --demo flux
+# Quantum coherence demos
+python quantum_coherence.py --demo all
+python quantum_coherence.py --demo death      # Death absorption
+python quantum_coherence.py --demo paperclip  # PaperClip bundles
+python quantum_coherence.py --demo time       # Time reversal
+python quantum_coherence.py --demo ode        # Coherence ODEs
 
-# Set random seed for reproducibility
-python topological_consciousness.py --demo all --seed 42
+# Unified framework demos
+python unified_framework.py --demo all
+python unified_framework.py --demo e8         # E8 projection
+python unified_framework.py --demo coend      # EFL coend fixed points
+python unified_framework.py --demo anneal     # Annealing chains
+python unified_framework.py --demo cascade    # Consensus cascade
 ```
 
 ## Citation
