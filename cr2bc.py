@@ -1,3 +1,8 @@
+# cr2bc.py — Coherence-Renewal Bi-Coupling (CR²BC) Engine
+# Faithful, modular, drop-in Python implementation of the chaos-glyph spec.
+# No fluff. No persona. Just math → code.
+
+from __future__ import annotations
 #!/usr/bin/env python3
 """
 cr2bc.py
@@ -102,6 +107,17 @@ class AuditState:
 
 @dataclass
 class CR2BCConfig:
+    grid_shape: Tuple[int, int] = (8, 8)
+    band_scale_hz: float = 10.0
+    temporal_tau0: float = 5.0
+    window_size: int = 10
+    alpha0: float = 0.5
+    sigma_kappa: float = 0.1
+    beta_max: float = 0.4
+    theta: float = 0.6
+    epsilon: float = 0.1
+    lambda_T0: float = 0.1
+    burst_sensitivity: float = 1.0
     # Spatial capsule / grid
     grid_shape: Tuple[int, int] = (8, 8)
 
@@ -126,6 +142,9 @@ class CR2BCConfig:
 
 
 class CR2BC:
+    def __init__(self, config: Optional[CR2BCConfig] = None):
+        self.config = config or CR2BCConfig()
+        self.invariant = InvariantState.zeros(self.config.invariant_dim)
     """
     Coherence-Renewal Bi-Coupling (CR²BC) engine.
 
@@ -154,6 +173,18 @@ class CR2BC:
         r /= (np.max(r) + 1e-8)
         return r
 
+    def encode_spatial_capsule(self, sample: CoherenceSample, band: FrequencyBand) -> np.ndarray:
+        r = self._grid_r
+        kappa = sample.kappa[band]
+        phi = sample.phi[band]
+        k_d = band.center_hz / 40.0
+        psi = np.exp(-r**2)
+        return psi * kappa * np.cos(phi - k_d * r)
+
+    def encode_all_capsules(self, sample: CoherenceSample) -> Dict[FrequencyBand, np.ndarray]:
+        return {b: self.encode_spatial_capsule(sample, b) for b in ALL_BANDS}
+
+    def band_kernel(self) -> np.ndarray:
     # -------------------------------
     # 1. Spatial capsules C_t[d]
     # -------------------------------
@@ -194,6 +225,7 @@ class CR2BC:
         diff = np.abs(freqs[:, None] - freqs[None, :])
         return np.exp(-diff / B0)
 
+    def temporal_kernel(self, times: List[float], t_ref: float) -> np.ndarray:
     def temporal_kernel(
         self,
         times: List[float],
@@ -208,6 +240,9 @@ class CR2BC:
         deltas = np.maximum(0.0, t_ref - np.array(times, dtype=float))
         return np.exp(-deltas / tau0)
 
+    def encode_hints(self, hints: Optional[AgentHints]) -> np.ndarray:
+        dim = self.config.invariant_dim
+        if not hints or (not hints.agent_a and not hints.agent_b):
     # -------------------------------
     # 3. Agent hints → latent bias
     # -------------------------------
@@ -243,6 +278,9 @@ class CR2BC:
         history: List[CoherenceSample],
         hints: Optional[AgentHints] = None,
     ) -> Tuple[CoherenceSample, InvariantState, AuditState]:
+        if not history:
+            raise ValueError("history must contain at least one sample")
+
         """
         Core CR²BC step.
 
@@ -256,6 +294,10 @@ class CR2BC:
         times = [s.t for s in history]
         t_ref = current.t
 
+        S_B = self.band_kernel()
+        S_tau = self.temporal_kernel(times, t_ref)
+
+        T, D = len(history), len(ALL_BANDS)
         # Kernels
         S_B = self.band_kernel()                    # [D, D]
         S_tau = self.temporal_kernel(times, t_ref)  # [T]
@@ -267,6 +309,9 @@ class CR2BC:
         for ti, s in enumerate(history):
             for di, b in enumerate(ALL_BANDS):
                 K[ti, di] = s.kappa[b]
+
+        w_time = S_tau / (S_tau.sum() + 1e-8)
+        w_band = S_B / (S_B.sum(axis=1, keepdims=True) + 1e-8)
 
         # Temporal weights per time step
         w_time = S_tau / (S_tau.sum() + 1e-8)
@@ -283,6 +328,25 @@ class CR2BC:
                 for dj in range(D):
                     contrib += w_time[ti] * w_band[di, dj] * K[ti, dj]
             K_recon[di] = contrib
+
+        phi_recon = np.array([current.phi[b] for b in ALL_BANDS], dtype=float)
+        K_current = np.array([current.kappa[b] for b in ALL_BANDS], dtype=float)
+
+        delta_kappa = K_recon - K_current
+        delta_kappa_norm = float(np.linalg.norm(delta_kappa))
+        K_mean = K.mean(axis=0)
+        spectral_dev = float(np.linalg.norm(K_recon - K_mean))
+        structural_break = float(np.linalg.norm(K[-1] - 2 * K[-2] + K[-3])) if T >= 3 else 0.0
+
+        score = -(delta_kappa_norm + spectral_dev + structural_break)
+        accepted = abs(score) < self.config.epsilon
+
+        noise_level = float(K.std())
+        alpha_t = self.config.alpha0 / (1.0 + self.config.sigma_kappa * noise_level)
+        beta_t = self._beta_from_coherence(K_recon)
+
+        kappa_renewed = K_current + alpha_t * (K_recon - K_current)
+        kappa_renewed = np.clip(kappa_renewed, 0.0, 1.0)
 
         # Phases: for now, copy-through but could be regularised similarly
         phi_recon = np.array(
@@ -332,6 +396,8 @@ class CR2BC:
             context=current.context,
         )
 
+        hint_vec = self.encode_hints(hints)
+        new_invariant = self._update_invariant(self.invariant, recon_sample, beta_t, hint_vec)
         # Update invariant Π_t
         hint_vec = self.encode_hints(hints)
         new_invariant = self._update_invariant(
@@ -351,6 +417,7 @@ class CR2BC:
         )
         return recon_sample, new_invariant, audit
 
+    def _beta_from_coherence(self, kappa_recon: np.ndarray) -> float:
     # -------------------------------
     # 5. Coherence → β_t schedule
     # -------------------------------
@@ -376,6 +443,10 @@ class CR2BC:
         beta_t: float,
         hint_vec: np.ndarray,
     ) -> InvariantState:
+        band_values = np.array([sample.kappa[b] for b in ALL_BANDS], dtype=float)
+        stats = np.array([band_values.mean(), band_values.std()], dtype=float)
+        raw = np.concatenate([band_values, stats], axis=0)
+
         """
         Π_t = (1 - β_t) Π_{t-1} + β_t U[κ̃_t] + small hint bias
 
@@ -398,6 +469,10 @@ class CR2BC:
         proj = rng.normal(size=(dim, raw.shape[0]))
         proj /= np.linalg.norm(proj, axis=1, keepdims=True) + 1e-8
         encoded = proj @ raw
+        encoded /= np.linalg.norm(encoded) + 1e-8
+
+        new_vec = (1.0 - beta_t) * prev.vec + beta_t * encoded
+        new_vec += 0.05 * hint_vec
 
         encoded /= np.linalg.norm(encoded) + 1e-8
 
@@ -409,6 +484,12 @@ class CR2BC:
 
 
 # ---------------------------------------------------------------------
+# Example usage
+# ---------------------------------------------------------------------
+if __name__ == "__main__":
+    cfg = CR2BCConfig()
+    engine = CR2BC(cfg)
+
 # Example usage & demos
 # ---------------------------------------------------------------------
 
@@ -425,6 +506,15 @@ def demo_basic_reconstruction():
     for k in np.linspace(0.3, 0.8, 5):
         kappa = {b: float(k + 0.05 * np.random.randn()) for b in ALL_BANDS}
         phi = {b: float(np.random.uniform(-np.pi, np.pi)) for b in ALL_BANDS}
+        history.append(CoherenceSample(t=t, kappa=kappa, phi=phi, context="sim"))
+        t += 1.0
+
+    hints = AgentHints(agent_a="baseline", agent_b="task A")
+    recon, inv, audit = engine.reconstruct(history, hints=hints)
+
+    print("Reconstructed kappa:", recon.kappa)
+    print("Invariant norm:", np.linalg.norm(inv.vec))
+    print("Audit:", audit)
         history.append(CoherenceSample(t=t, kappa=kappa, phi=phi, context="baseline"))
         t += 1.0
 
