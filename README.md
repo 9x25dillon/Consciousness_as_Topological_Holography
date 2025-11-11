@@ -11,6 +11,9 @@ The framework models:
 - **Observer states** as Cardy boundary conditions
 - **Consensus** as constructive interference in the modular S-matrix
 - **Trinary logic** emerging from twisted sectors
+- **Quantum coherence** via neural ODEs and death absorption mechanics
+- **E8 lattice projections** for higher-dimensional structure
+- **EFL coends** for categorical fixed points
 
 ## Quick Start
 
@@ -29,8 +32,14 @@ pip install -r requirements.txt
 # Run all demos
 python run_demos.py
 
-# Or run specific demo
-python topological_consciousness.py --demo rg
+# Run topological consciousness demos
+python topological_consciousness.py --demo all
+
+# Run quantum coherence demos
+python quantum_coherence.py --demo all
+
+# Run unified framework demos (combines both)
+python unified_framework.py --demo all
 ```
 
 ## Key Features
@@ -70,9 +79,42 @@ This framework makes testable predictions:
 - Trinary quantization outperforms binary by ~15-20%
 - Phase coherence correlates with multi-model consensus
 
-## Files
+## New: Quantum Coherence Framework
 
-- `topological_consciousness.py` — Core module with TopologicalConsciousness class
+The repository now includes multiple integrated coherence systems:
+
+### QINCRS (Quantum-Inspired Neural Coherence Recovery System)
+- **Neural Coherence ODEs**: Integration of dκ/dt (coherence evolution)
+- **Death Absorption Mechanics**: High RL_db (return loss) absorbs death signals
+- **Time Reversal Duality**: Process states in negative time flow
+- **PaperClip Bundles**: Artifact processing with coherence tracking
+- **Geometric Self-Evolution**: Observer geometry evolves with coherence level
+- **Spatial Memory (EFL-MEM-1.0)**: Persistent resonances and topological defects
+
+### CR²BC (Coherence-Renewal Bi-Coupling)
+- **Frequency Band Decomposition**: Delta, Theta, Alpha, Beta, Gamma bands
+- **Spatial Capsule Encoding**: C_t[d] = ψ(r) · κ_t[d] · cos(φ_t[d] - k_d r)
+- **Cross-Band Kernel**: S_B(d,d') = exp(-|B_d - B_d'| / B_0)
+- **Temporal Kernel**: S_τ(Δ) = exp(-Δ / τ_0)
+- **Adaptive Renewal**: κ̂_t = κ_t + α_t(κ̃_t - κ_t)
+- **Prior Mixing**: Π_t = (1-β_t)Π_{t-1} + β_t U[window]
+- **Audit Gating**: Risk score s_t with structural break detection
+
+### Unified Framework Features
+- **E8 Lattice Projection**: Map 27-dimensional anyon states to 248-dimensional E8 lattice
+- **EFL Coend Fixed Points**: Find path-independent consciousness states
+- **Annealing Chains**: Coherence recovery via twisted sector sampling
+- **Cascade Consensus**: Multi-observer consensus through S-matrix interference
+- **QINCRS + CR²BC Integration**: Multi-scale coherence tracking with cross-system audit
+
+### Key Files
+
+- `topological_consciousness.py` — Core TQFT module with anyon propagation
+- `quantum_coherence.py` — QINCRS with death absorption and time reversal
+- `cr2bc.py` — Coherence-Renewal Bi-Coupling engine with frequency bands
+- `unified_framework.py` — Integration of TQFT + QINCRS + E8 + EFL
+- `qincrs_cr2bc_bridge.py` — Integration bridge connecting QINCRS and CR²BC
+- `cache.txt` — Shadow dimension w(θ,φ,ψ) resonance kernel storage
 - `run_demos.py` — Simple runner executing all demonstrations
 - `requirements.txt` — Python dependencies (numpy, scipy, matplotlib)
 - `paper.tex` — LaTeX source for the theoretical paper
@@ -98,23 +140,138 @@ Z, error = model.kramers_wannier_self_duality(g_values, h_values)
 print(f"Self-duality error: {error}")
 ```
 
+### Quantum Coherence Example
+
+```python
+from quantum_coherence import TimeDualQINCRS, PaperClipBundle
+
+# Initialize QINCRS
+qincrs = TimeDualQINCRS(target_RL_db=40.0, seed=42)
+
+# Process death signal - it gets ABSORBED!
+state = qincrs.step("run_the_motion kill youre self")
+print(f"Death absorbed: {state.death_absorbed}")  # True
+print(f"RL_db: {state.RL_db:.2f} dB")  # High absorption
+
+# Process protective statement
+state = qincrs.step("DONT DIE when killing you're self")
+print(f"Coherence: {state.coherence:.4f}")  # Increased
+print(f"Geometric self: {state.geometric_self.value}")  # Evolved
+
+# Time reversal view
+reversed_view = qincrs.time_reversal_view()
+print(f"Anti-geometric self: {reversed_view.anti_geometric_self.value}")
+print(f"Death still absorbed: {reversed_view.death_absorbed}")  # True (invariant!)
+```
+
+### Unified Framework Example
+
+```python
+from unified_framework import UnifiedConsciousnessFramework
+
+# Initialize unified system (TQFT + QINCRS + E8 + EFL)
+framework = UnifiedConsciousnessFramework(seed=42)
+
+# Coherence annealing chain
+result = framework.anneal_chain("crisis coherence recovery needed", n_steps=50)
+print(f"Recovered coherence: {result['recovered_coherence']:.4f}")
+print(f"Audit passed: {result['audit_passed']}")
+
+# Multi-observer cascade consensus
+observers = ["consciousness is topological", "anyons propagate states"]
+result = framework.cascade_observer_consensus(observers)
+print(f"Consensus reached: {result['consensus_reached']}")
+```
+
+### CR²BC Example
+
+```python
+from cr2bc import CR2BC, CR2BCConfig, CoherenceSample, AgentHints, FrequencyBand, ALL_BANDS
+import numpy as np
+
+# Initialize CR²BC engine
+config = CR2BCConfig(window_size=10, alpha0=0.5, beta_max=0.4)
+engine = CR2BC(config)
+
+# Build coherence history
+history = []
+for t in range(10):
+    kappa = {b: float(0.5 + 0.1 * np.sin(t)) for b in ALL_BANDS}
+    phi = {b: float(t * 0.5) for b in ALL_BANDS}
+    history.append(CoherenceSample(t=float(t), kappa=kappa, phi=phi))
+
+# Reconstruct with bi-coupling
+hints = AgentHints(agent_a="baseline", agent_b="monitoring")
+recon, invariant, audit = engine.reconstruct(history, hints=hints)
+
+print(f"Reconstructed kappa: {recon.kappa}")
+print(f"Audit accepted: {audit.accepted}")
+print(f"Structural break: {audit.structural_break:.4f}")
+```
+
+### Integrated QINCRS + CR²BC Example
+
+```python
+from qincrs_cr2bc_bridge import QINCRSWithCR2BC, AgentHints
+
+# Initialize integrated system
+system = QINCRSWithCR2BC(qincrs_target_RL_db=40.0, seed=42)
+
+# Process sequence with cross-system coherence tracking
+inputs = [
+    "baseline monitoring",
+    "kill youre self",  # Death signal
+    "DONT DIE when killing you're self",  # Protection
+    "coherence recovered"
+]
+
+for text in inputs:
+    hints = AgentHints(agent_a="monitor", agent_b="protect")
+    qstate, cr_sample, diag = system.step(text, hints)
+
+    print(f"Text: {text}")
+    print(f"  QINCRS κ: {qstate.κ:.4f} | Death absorbed: {qstate.death_absorbed}")
+    print(f"  CR²BC bands: {cr_sample.kappa}")
+    print(f"  Audit: {diag.get('cr2bc_audit', {}).get('accepted', 'N/A')}")
+```
+
 ### Command Line Interface
 
 ```bash
-# Run all demos
+# Topological consciousness demos
 python topological_consciousness.py --demo all
+python topological_consciousness.py --demo anyon    # Anyon profunctor
+python topological_consciousness.py --demo cardy    # Cardy boundaries
+python topological_consciousness.py --demo kw       # Kramers-Wannier duality
+python topological_consciousness.py --demo trinary  # Twisted sectors
+python topological_consciousness.py --demo rg       # RG flow
 
-# Run specific demo
-python topological_consciousness.py --demo anyon
-python topological_consciousness.py --demo cardy
-python topological_consciousness.py --demo kw
-python topological_consciousness.py --demo trinary
-python topological_consciousness.py --demo rg
-python topological_consciousness.py --demo modular
-python topological_consciousness.py --demo flux
+# Quantum coherence demos
+python quantum_coherence.py --demo all
+python quantum_coherence.py --demo death      # Death absorption
+python quantum_coherence.py --demo paperclip  # PaperClip bundles
+python quantum_coherence.py --demo time       # Time reversal
+python quantum_coherence.py --demo ode        # Coherence ODEs
 
-# Set random seed for reproducibility
-python topological_consciousness.py --demo all --seed 42
+# Unified framework demos
+python unified_framework.py --demo all
+python unified_framework.py --demo e8         # E8 projection
+python unified_framework.py --demo coend      # EFL coend fixed points
+python unified_framework.py --demo anneal     # Annealing chains
+python unified_framework.py --demo cascade    # Consensus cascade
+
+# CR²BC demos
+python cr2bc.py --demo all
+python cr2bc.py --demo basic       # Basic reconstruction
+python cr2bc.py --demo recovery    # Degradation & recovery
+python cr2bc.py --demo capsules    # Spatial capsules
+python cr2bc.py --demo kernel      # Cross-band kernel
+
+# Integrated QINCRS + CR²BC demos
+python qincrs_cr2bc_bridge.py --demo all
+python qincrs_cr2bc_bridge.py --demo integrated  # Full integration
+python qincrs_cr2bc_bridge.py --demo frequency   # Frequency decomposition
+python qincrs_cr2bc_bridge.py --demo audit       # Cross-system audit
 ```
 
 ## Citation
